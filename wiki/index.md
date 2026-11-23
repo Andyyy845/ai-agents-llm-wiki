@@ -6,7 +6,7 @@
 
 ## 📚 已收錄論文條目清單 (Ingested Papers)
 
-目前累計收錄篇數：**4 篇**（本專案目標：至少 5 篇核心學術論文）。
+目前累計收錄篇數：**5 篇**（已達成專案標準：至少收錄 5 篇核心學術論文）。
 
 | 編號 | 論文名稱 (Title) | 核心領域 | 發表年份 | 作者群 | Wiki 條目 | 原始文獻 |
 | :---: | :--- | :--- | :---: | :--- | :---: | :---: |
@@ -14,44 +14,44 @@
 | 02 | **Language Models are Few-Shot Learners** | GPT-3 / In-Context Learning / Scaling | 2020 | Tom B. Brown 等人 (OpenAI) | [詳細條目](language_models_are_few_shot_learners.md) | [PDF 原始檔](../raw/language_models_are_few_shot_learners.pdf) / [arXiv](https://arxiv.org/abs/2005.14165) |
 | 03 | **ReAct: Synergizing Reasoning and Acting in Language Models** | AI Agents / Reasoning Loop / Decision Making | 2022 | Shunyu Yao 等人 (Princeton & Google) | [詳細條目](react_reasoning_and_acting.md) | [PDF 原始檔](../raw/react_reasoning_and_acting.pdf) / [arXiv](https://arxiv.org/abs/2210.03629) |
 | 04 | **Toolformer: Language Models Can Teach Themselves to Use Tools** | Tool Use / Self-Supervised Learning / API Calling | 2023 | Timo Schick 等人 (Meta AI) | [詳細條目](toolformer.md) | [PDF 原始檔](../raw/toolformer.pdf) / [arXiv](https://arxiv.org/abs/2302.04761) |
+| 05 | **Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks** | RAG / Dense Retrieval / Hybrid Memory | 2020 | Patrick Lewis 等人 (FAIR) | [詳細條目](retrieval_augmented_generation.md) | [PDF 原始檔](../raw/retrieval_augmented_generation.pdf) / [arXiv](https://arxiv.org/abs/2005.11401) |
 
 ---
 
 ## 🧭 知識脈絡導航 (Knowledge Progression)
 
 ```
-[現代 LLM 與 Agent 技術演進史]
+[現代 LLM 與 AI Agents 技術演進地圖]
   │
   ├── 1. Attention Is All You Need (2017)
-  │      └── 基礎架構突破：顛覆 RNN/CNN，確立 Transformer 與 Self-Attention 核心地位
+  │      └── 【底層基石】：打破 RNN 序列限制，奠定 Transformer 與自注意力平行計算架構
   │
   ├── 2. Language Models are Few-Shot Learners (2020)
-  │      └── 模型規模擴展：發現 Scaling Law，開創 Prompting 與 In-Context Learning 典範
+  │      └── 【能力湧現】：驗證 Scaling Laws 規模定律，確立 In-Context Learning 與 Few-Shot 提示典範
   │
-  └── [走向外部世界與自主行動：AI Agents 的兩大工具路徑]
-         │
-         ├── 3. ReAct: Reasoning + Acting (2022) ──【提示階段的思考代理循環】
-         │      └── 凍結大模型 + In-Context Prompting：透過 Thought-Action-Observation 閉環動態規劃
-         │
-         └── 4. Toolformer: Self-Supervised Tool Use (2023) ──【訓練階段的工具微調內嵌】
-                └── 權重微調 + 自監督損失過濾：讓模型在文字預測中自主學會插入 API 呼叫
+  ├── 3. Retrieval-Augmented Generation (RAG) (2020)
+  │      └── 【外掛記憶】：參數化（BART）+ 非參數化（DPR 維基索引），實現免重訓之知識熱插拔（Hot-swapping）
+  │
+  ├── 4. ReAct: Reasoning + Acting (2022)
+  │      └── 【思維閉環】：以 Thought-Action-Observation 循環，在凍結模型下實現動態推理與環境互動
+  │
+  └── 5. Toolformer (2023)
+         └── 【工具內嵌】：以自監督損失差值過濾，訓練模型自主決定何時呼叫 API 工具
 ```
 
 ---
 
-## ⚖️ 核心技術對比：ReAct vs. Toolformer (重要概念區分)
+## ⚖️ 三大進階架構辨析：RAG vs. ReAct vs. Toolformer
 
-在 AI Agents 與工具調用領域，ReAct 與 Toolformer 常被提及，但兩者在**運作層級、模型狀態與執行架構**上有著根本性差異，不可混為一談：
+本專案收錄的三篇工具與外部資訊擴展經典論文，各自解決不同面向的問題：
 
-| 比較維度 | ReAct (Reasoning + Acting) | Toolformer (Self-Supervised Tool Calling) |
-| :--- | :--- | :--- |
-| **技術定位** | **動態推理與多步驟決策工作流程 (Workflow)** | **模型層級的自監督工具呼叫學習 (Training Method)** |
-| **模型狀態** | **凍結模型 (Frozen LLM)**，無需更新權重 | **微調模型 (Finetuned LLM)**，更新模型權重 |
-| **執行機制** | **In-Context 提示工程**（提供少數範例引導） | **自監督訓練**（利用損失差值 $L^- - L^+ \ge \tau_f$ 篩選語料） |
-| **核心互動迴圈** | `Thought ➔ Action ➔ Observation ➔ Thought` 多輪迭代 | 單向文字生成時，自主輸出 `<API>` 並在 `$\to$` 中斷等待結果插入 |
-| **思維透明度** | **高**：明確輸出語言形式的「思考歷程（Thought）」 | **無**：直接預測是否呼叫 API，無中間自然語言思維鏈 |
-| **多步驟鏈式調用** | **支援**：可根據前一次結果動態決定下一步行動 | **不支援**：API 獨立生成，無法將 A 工具輸出作為 B 工具輸入 |
-| **主要應用場景** | 複雜多跳問答（HotpotQA）、文字遊戲（ALFWorld）、網頁購物（WebShop） | 基礎常規運算（Calculator）、維基實體檢索、機器翻譯、行事曆日期 |
+| 比較維度 | RAG (檢索增強生成) | ReAct (推理與行動協同) | Toolformer (自監督工具呼叫) |
+| :--- | :--- | :--- | :--- |
+| **核心目標** | 解決知識過期與記憶容量問題，提供外部可信事實依據 | 解決複雜任務規劃與幻覺問題，實現多步動態決策 | 解決計算、日期等固有缺陷，使模型自主學會調用 API |
+| **記憶/工具機制** | 參數化記憶（BART）+ 非參數化記憶（DPR 稠密向量索引） | 外部環境 API（搜尋、點擊、觀察），透過 Prompting 驅動 | 透過特殊的 API Token 內嵌於模型詞彙與文字預測中 |
+| **模型狀態** | 端到端聯合微調（BERT_q + BART） | 凍結大模型（PaLM / GPT-3），純靠上下文提示 | 自監督資料擴增後微調模型（GPT-J 6.7B） |
+| **互動形式** | 一次性檢索 Top-K 文檔後融合生成 | 多輪 `Thought ➔ Action ➔ Observation` 閉環 | 生成到 `$\to$` 時中斷解碼，插入單一工具結果後接續 |
+| **典型場景** | 企業知識庫、法規查核、文檔問答（ChatPDF） | 具身導航（ALFWorld）、多跳深度推論、網頁下單 | 數學計算器、時間日曆查詢、機器翻譯轉換 |
 
 ---
 
