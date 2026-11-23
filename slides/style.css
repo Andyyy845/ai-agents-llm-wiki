@@ -1,0 +1,395 @@
+/* ===================================================================
+   現代化 HTML 簡報樣式表 - 《從大型語言模型（LLM）到 AI Agents 與 RAG》
+   =================================================================== */
+
+:root {
+  --bg-main: #0b0f19;
+  --bg-card: rgba(30, 41, 59, 0.7);
+  --bg-card-hover: rgba(51, 65, 85, 0.8);
+  --border-card: rgba(148, 163, 184, 0.2);
+  --border-focus: #38bdf8;
+  
+  --text-main: #f8fafc;
+  --text-sub: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-cyan: #38bdf8;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-purple: #c084fc;
+  --accent-rose: #fb7185;
+  --accent-blue: #60a5fa;
+
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.35s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  user-select: none;
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(192, 132, 252, 0.08) 0%, transparent 40%);
+}
+
+/* 頂部進度條 */
+.progress-bar-container {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 50;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 10%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+  transition: width var(--transition-normal);
+}
+
+/* 簡報主舞台 */
+.presentation-container {
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 2rem;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px) scale(0.99);
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* 頁面標題區 */
+.slide-header {
+  margin-bottom: 0.75rem;
+}
+
+.badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.category-tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.concept-notice {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.slide-title {
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.slide-subtitle {
+  font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+  color: var(--text-sub);
+  margin-top: 0.2rem;
+}
+
+/* 簡報內文與格狀佈局 */
+.slide-body {
+  flex: 1;
+  display: flex;
+  gap: 1.25rem;
+  align-items: stretch;
+  justify-content: space-between;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.col-left, .col-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card.highlight {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(15, 23, 42, 0.85);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent-cyan);
+}
+
+.card-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-sub);
+}
+
+.card-text strong {
+  color: #ffffff;
+}
+
+.point-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.point-list li {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text-sub);
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.point-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  font-weight: bold;
+}
+
+/* 視覺化圖表 / 比較表組件 */
+.visual-container {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid var(--border-card);
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  height: 100%;
+}
+
+.diagram-svg {
+  width: 100%;
+  max-height: 280px;
+}
+
+/* 數學公式卡片 */
+.formula-box {
+  background: #020617;
+  border: 1px solid #334155;
+  border-left: 4px solid var(--accent-cyan);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-family: "Cambria Math", "Latin Modern Math", KaTeX_Math, serif;
+  font-size: 1.1rem;
+  color: #38bdf8;
+  text-align: center;
+  letter-spacing: 0.05em;
+  margin: 0.35rem 0;
+}
+
+.formula-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* 比較表格 */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.comparison-table th, .comparison-table td {
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid var(--border-card);
+}
+
+.comparison-table th {
+  background: rgba(30, 41, 59, 0.9);
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.comparison-table td {
+  color: var(--text-sub);
+}
+
+.comparison-table tr:hover td {
+  background: rgba(51, 65, 85, 0.4);
+}
+
+/* 頁面頁尾與來源標註 */
+.slide-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.wiki-citation {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--accent-emerald);
+  background: rgba(52, 211, 153, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+/* 底部操作控制列 */
+.presentation-controls {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.6rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 50;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: var(--text-main);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all var(--transition-fast);
+}
+
+.btn:hover {
+  background: #334155;
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: #334155;
+}
+
+.page-counter {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  letter-spacing: 0.05em;
+}
+
+.keyboard-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.keyboard-key {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid #475569;
+  border-radius: 3px;
+  background: #1e293b;
+  color: var(--text-sub);
+  font-size: 0.7rem;
+  margin: 0 0.15rem;
+}
+
+/* 響應式優化 */
+@media (max-width: 900px) {
+  .slide-body {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .card {
+    padding: 0.75rem;
+  }
+  .slide-title {
+    font-size: 1.3rem;
+  }
+}

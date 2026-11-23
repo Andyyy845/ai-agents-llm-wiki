@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>從大型語言模型（LLM）到 AI Agents 與 RAG</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 頂部播放進度條 -->
+  <div class="progress-bar-container">
+    <div id="progress-bar" class="progress-bar"></div>
+  </div>
+
+  <!-- 簡報主舞台 -->
+  <main class="presentation-container">
+
+    <!-- ==================== 第 1 頁 ==================== -->
+    <section class="slide active" id="slide-1">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">導引與全景</span>
+        </div>
+        <h1 class="slide-title">從大型語言模型（LLM）到 AI Agents 與 RAG</h1>
+        <p class="slide-subtitle">現代人工智慧的「認知、行動與記憶」革命 —— 給大學生的高效入門指南</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card highlight">
+            <h3 class="card-title">💡 為什麼需要理解這場革命？</h3>
+            <p class="card-text">
+              我們在日常生活頻繁使用 <strong>ChatGPT</strong>，但你是否遇過它<strong>算錯簡單加減乘除</strong>、<strong>記錯最新新聞事件</strong>，或是<strong>煞有介事地編造假事實（幻覺）</strong>？
+            </p>
+            <p class="card-text">
+              單純依靠一個龐大的文字預測模型有其先天物理極限。現代 AI 正從「被動聊天機器人」蛻變為具備<strong>自主推理、工具調用與記憶擴展能力的 AI Agent</strong>。
+            </p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">🗺️ 本課程核心主線</h3>
+            <ul class="point-list">
+              <li><strong>底層架構基石</strong>：Transformer 如何實現全並行計算與全域語意捕捉？</li>
+              <li><strong>能力規模湧現</strong>：GPT-3 如何開啟不改權重的 In-Context Learning 典範？</li>
+              <li><strong>外掛動態記憶</strong>：RAG 如何透過向量檢索讓模型免重新訓練即可即時更新世界知識？</li>
+              <li><strong>知行合一閉環</strong>：ReAct 與 Toolformer 如何賦予 AI 思考規劃與使用外部 API 的能力？</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="visual-container">
+            <h4 style="color: var(--accent-cyan); font-size: 0.95rem;">學術演進脈絡時間軸 (2017 ~ 2023)</h4>
+            <svg class="diagram-svg" viewBox="0 0 500 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 時間軸橫線 -->
+              <line x1="40" y1="120" x2="460" y2="120" stroke="#334155" stroke-width="4" stroke-dasharray="4 4"/>
+              
+              <!-- 節點 1: Transformer (2017) -->
+              <circle cx="60" cy="120" r="14" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/>
+              <text x="60" y="85" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="bold">2017</text>
+              <text x="60" y="155" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="600">Transformer</text>
+              <text x="60" y="172" text-anchor="middle" fill="#94a3b8" font-size="9">自注意力架構</text>
+
+              <!-- 節點 2: GPT-3 (2020) -->
+              <circle cx="160" cy="120" r="14" fill="#7c3aed" stroke="#c084fc" stroke-width="3"/>
+              <text x="160" y="85" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="bold">2020.05</text>
+              <text x="160" y="155" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="600">GPT-3 (175B)</text>
+              <text x="160" y="172" text-anchor="middle" fill="#94a3b8" font-size="9">Few-Shot 提示</text>
+
+              <!-- 節點 3: RAG (2020) -->
+              <circle cx="260" cy="120" r="14" fill="#059669" stroke="#34d399" stroke-width="3"/>
+              <text x="260" y="85" text-anchor="middle" fill="#34d399" font-size="12" font-weight="bold">2020.05</text>
+              <text x="260" y="155" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="600">RAG (Lewis)</text>
+              <text x="260" y="172" text-anchor="middle" fill="#94a3b8" font-size="9">外掛稠密檢索</text>
+
+              <!-- 節點 4: ReAct (2022) -->
+              <circle cx="360" cy="120" r="14" fill="#d97706" stroke="#fbbf24" stroke-width="3"/>
+              <text x="360" y="85" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="bold">2022.10</text>
+              <text x="360" y="155" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="600">ReAct</text>
+              <text x="360" y="172" text-anchor="middle" fill="#94a3b8" font-size="9">思考行動循環</text>
+
+              <!-- 節點 5: Toolformer (2023) -->
+              <circle cx="450" cy="120" r="14" fill="#e11d48" stroke="#fb7185" stroke-width="3"/>
+              <text x="450" y="85" text-anchor="middle" fill="#fb7185" font-size="12" font-weight="bold">2023.02</text>
+              <text x="450" y="155" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="600">Toolformer</text>
+              <text x="450" y="172" text-anchor="middle" fill="#94a3b8" font-size="9">自監督 API 調用</text>
+            </svg>
+            <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+              本簡報所有論述與數據 100% 取自專案 Wiki 收錄之 5 篇權威學術論文
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>AI Agents 與大型語言模型（LLM）Wiki 成果簡報</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/index.md 第 2 節</span>
+      </div>
+    </section>
+
+    <!-- ==================== 第 2 頁 ==================== -->
+    <section class="slide" id="slide-2">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">核心概念全景</span>
+          <span class="concept-notice">【教學概念示意】</span>
+        </div>
+        <h2 class="slide-title">三足鼎立：LLM、AI Agent 與 RAG 的協同分工</h2>
+        <p class="slide-subtitle">現代智慧系統如何將「運算大腦、外部記憶與行動手腳」有機整合？</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card">
+            <h3 class="card-title">🧠 1. LLM（大腦中樞）</h3>
+            <p class="card-text">
+              以 Transformer 架構為核心，透過海量文本預訓練具備強大的<strong>自迴歸語言生成與常識理解</strong>能力。
+              <br><em>限制</em>：權重一旦訓練完成即凍結（Parametric Memory），無法主動知道昨天發生的事。
+            </p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">📚 2. RAG（外掛圖書館）</h3>
+            <p class="card-text">
+              透過非參數化稠密向量檢索（Non-parametric Memory），在問答時即時翻閱最新、最權威的外部知識庫。
+              <br><em>價值</em>：<strong>提供可驗證的出處來源</strong>，解決知識過期並大幅降低事實幻覺。
+            </p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">🦾 3. AI Agent（行動手腳與思考閉環）</h3>
+            <p class="card-text">
+              讓模型不再只當被動的文字產生器，而是具備<strong>目標拆解、環境互動與工具操作</strong>能力（如 ReAct 與 Toolformer），能呼叫外部 API 完成具體任務。
+            </p>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="visual-container">
+            <h4 style="color: var(--accent-cyan); font-size: 0.95rem;">協同運作概念架構圖</h4>
+            <svg class="diagram-svg" viewBox="0 0 460 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 中央大腦 LLM -->
+              <rect x="150" y="80" width="160" height="90" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="230" y="118" text-anchor="middle" fill="#38bdf8" font-size="14" font-weight="bold">LLM 中央大腦</text>
+              <text x="230" y="138" text-anchor="middle" fill="#94a3b8" font-size="10">語言理解與邏輯生成</text>
+              <text x="230" y="153" text-anchor="middle" fill="#64748b" font-size="9">(Transformer / GPT-3)</text>
+
+              <!-- 左側 RAG -->
+              <rect x="15" y="85" width="95" height="80" rx="8" fill="#132a24" stroke="#34d399" stroke-width="2"/>
+              <text x="62" y="120" text-anchor="middle" fill="#34d399" font-size="13" font-weight="bold">RAG 記憶</text>
+              <text x="62" y="140" text-anchor="middle" fill="#94a3b8" font-size="9">非參數向量庫</text>
+
+              <!-- 右側 Agent Tools -->
+              <rect x="350" y="85" width="95" height="80" rx="8" fill="#311e2f" stroke="#fb7185" stroke-width="2"/>
+              <text x="397" y="120" text-anchor="middle" fill="#fb7185" font-size="13" font-weight="bold">Agent 工具</text>
+              <text x="397" y="140" text-anchor="middle" fill="#94a3b8" font-size="9">API / 環境行動</text>
+
+              <!-- 雙向箭頭 -->
+              <path d="M110 125 L150 125" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+              <path d="M150 135 L110 135" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+              
+              <path d="M310 125 L350 125" stroke="#fb7185" stroke-width="2" marker-end="url(#arrow-red)"/>
+              <path d="M350 135 L310 135" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+              <text x="130" y="115" text-anchor="middle" fill="#34d399" font-size="8">文檔回傳</text>
+              <text x="330" y="115" text-anchor="middle" fill="#fb7185" font-size="8">調用指令</text>
+
+              <!-- 箭頭標記 -->
+              <defs>
+                <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/></marker>
+                <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/></marker>
+                <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#fb7185"/></marker>
+              </defs>
+            </svg>
+            <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+              註：此圖為五篇學術思想之教學概念整合示意，各技術在歷史上獨立發表
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>模組分工概念導讀</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/index.md 第 3 節；wiki/react_reasoning_and_acting.md 第 2 節</span>
+      </div>
+    </section>
+
+    <!-- ==================== 第 3 頁 ==================== -->
+    <section class="slide" id="slide-3">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">底層架構革命</span>
+        </div>
+        <h2 class="slide-title">拋棄遞迴的架構革命：Attention Is All You Need (2017)</h2>
+        <p class="slide-subtitle">Transformer 如何徹底改變序列建模？自注意力機制的數學與設計本質</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card">
+            <h3 class="card-title">⚡ 傳統 RNN 的三大致命瓶頸</h3>
+            <ul class="point-list">
+              <li><strong>無法平行計算</strong>：計算必須依時序一步步遞迴（$h_t = f(h_{t-1}, x_t)$），無法充分利用 GPU 平行算力。</li>
+              <li><strong>長距離依賴衰退</strong>：任意兩個詞彙間的資訊傳遞路徑長度達 $O(n)$，句子越長越容易遺忘。</li>
+            </ul>
+          </div>
+          <div class="card highlight">
+            <h3 class="card-title">📐 縮放點積注意力 (Scaled Dot-Product Attention)</h3>
+            <div class="formula-box">
+              Attention(Q, K, V) = softmax( (Q K<sup>T</sup>) / √d<sub>k</sub> ) V
+            </div>
+            <p class="formula-note">
+              <strong>除以 √d<sub>k</sub> 的數學目的</strong>：當維度 $d_k$ 很大時（論文中 $d_k=64$），點積結果數值極大，容易把 Softmax 推向梯度極小的飽和區；縮放因子能穩定梯度、避免訓練崩潰。
+            </p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">🧩 多頭機制與位置編碼</h3>
+            <p class="card-text">
+              將 $Q, K, V$ 投影至 $h=8$ 個低維子空間（$d_k=d_v=64$）並行計算，避免單一注意力的權重平均化；並使用正弦與餘弦<strong>位置編碼（Positional Encoding）</strong>注入語意順序。
+            </p>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="visual-container">
+            <h4 style="color: var(--accent-cyan); font-size: 0.95rem;">運算複雜度對比 (Table 1, p.6)</h4>
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>網路架構類型</th>
+                  <th>每層運算複雜度</th>
+                  <th>序列操作步數</th>
+                  <th>最大資訊路徑長度</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background: rgba(56, 189, 248, 0.1);">
+                  <td><strong>Self-Attention</strong></td>
+                  <td>O(n² · d)</td>
+                  <td><strong>O(1)</strong></td>
+                  <td><strong>O(1)</strong></td>
+                </tr>
+                <tr>
+                  <td>Recurrent (RNN)</td>
+                  <td>O(n · d²)</td>
+                  <td>O(n)</td>
+                  <td>O(n)</td>
+                </tr>
+                <tr>
+                  <td>Convolutional (CNN)</td>
+                  <td>O(k · n · d²)</td>
+                  <td>O(1)</td>
+                  <td>O(log<sub>k</sub>(n))</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="card" style="width: 100%; margin-top: 0.5rem;">
+              <h3 class="card-title" style="color: var(--accent-amber);">⚠️ 客觀限制說明 (Limitations)</h3>
+              <p class="card-text" style="font-size: 0.85rem;">
+                在句子長度 $n < d$ 時，自注意力速度遠勝 RNN；但因矩陣相乘關係，對序列長度 $n$ 呈現 <strong>$O(n^2)$ 二次方計算與記憶體開銷</strong>，處理極長文本時負擔沉重。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Ashish Vaswani et al. (Google Brain / Research)</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/attention_is_all_you_need.md 第 2、3、4 節</span>
+      </div>
+    </section>
+
+    <!-- ==================== 第 4 頁 ==================== -->
+    <section class="slide" id="slide-4">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">能力規模湧現</span>
+        </div>
+        <h2 class="slide-title">不改權重的學習革命：GPT-3 與 In-Context Learning (2020)</h2>
+        <p class="slide-subtitle">當參數量擴展到 1,750 億：Zero-Shot、One-Shot 與 Few-Shot 提示工程的誕生</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card">
+            <h3 class="card-title">🔄 典範轉移：告別「預訓練 + 微調」</h3>
+            <p class="card-text">
+              傳統 NLP 仰賴 Fine-Tuning：收集成千上萬筆任務標註資料進行梯度更新。缺點是成本極高且容易過擬合於狹隘資料分佈。
+            </p>
+          </div>
+          <div class="card highlight">
+            <h3 class="card-title">✨ 上下文學習（In-Context Learning）</h3>
+            <p class="card-text">
+              <strong>完全不更新模型權重（Zero Gradient Updates）</strong>，僅在 Prompt 中給予說明與示範：
+            </p>
+            <ul class="point-list">
+              <li><strong>Zero-Shot (0S)</strong>：僅給任務指令（如：「翻譯成法文：起司 $\to$」）。</li>
+              <li><strong>One-Shot (1S)</strong>：指令 + 1 組範例示範。</li>
+              <li><strong>Few-Shot (FS)</strong>：指令 + 數組示範（$K=10 \sim 100$，塞滿 2048 Token 窗口）。</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3 class="card-title">🧑‍🎓 實習生生活比喻</h3>
+            <p class="card-text">
+              微調就像送大學生去讀 2 年法學碩士（花費巨大且可能遺忘其他技能）；Few-Shot 則是給聰明實習生看 3 份過往報告範例，他馬上照貓畫虎現學現賣。
+            </p>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="visual-container">
+            <h4 style="color: var(--accent-cyan); font-size: 0.95rem;">GPT-3 175B 實測真實數據 (Table 3.3, 3.8, 3.9)</h4>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; width: 100%;">
+              <div class="card" style="padding: 0.6rem;">
+                <div style="font-size: 0.75rem; color: var(--accent-cyan);">TriviaQA 封閉問答</div>
+                <div style="font-size: 1.1rem; font-weight: bold; color: #fff;">0S: 64.3% → FS: 71.2%</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted);">超越微調之 T5-11B (60.5%)</div>
+              </div>
+              <div class="card" style="padding: 0.6rem;">
+                <div style="font-size: 0.75rem; color: var(--accent-emerald);">2 位數加法運算 (2D+)</div>
+                <div style="font-size: 1.1rem; font-weight: bold; color: #fff;">0S: 76.9% → FS: 100%</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted);">2 位數減法亦達 98.9%</div>
+              </div>
+              <div class="card" style="padding: 0.6rem;">
+                <div style="font-size: 0.75rem; color: var(--accent-purple);">SAT 類比測試題</div>
+                <div style="font-size: 1.1rem; font-weight: bold; color: #fff;">Few-Shot: 65.2%</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted);">超越美國大學考生平均 57%</div>
+              </div>
+              <div class="card" style="padding: 0.6rem; border-color: rgba(251, 113, 133, 0.4);">
+                <div style="font-size: 0.75rem; color: var(--accent-rose);">WiC 字詞上下文一致性</div>
+                <div style="font-size: 1.1rem; font-weight: bold; color: var(--accent-rose);">Few-Shot: 49.4%</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted);">雙向任務極弱，等於猜硬幣！</div>
+              </div>
+            </div>
+
+            <div class="card" style="width: 100%; margin-top: 0.25rem;">
+              <h3 class="card-title" style="color: var(--accent-amber); font-size: 0.85rem;">⚠️ 論文指出的固有缺陷</h3>
+              <p class="card-text" style="font-size: 0.8rem;">
+                自迴歸無法雙向對照，在 NLI 與 WiC 疲弱；缺乏常識物理理解（如：「乳酪放進冰箱會融化嗎？」答不準）；長文本生成易前後矛盾。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Tom B. Brown et al. (OpenAI)</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/language_models_are_few_shot_learners.md 第 2、3.3、4、5 節</span>
+      </div>
+    </section>
+
+    <!-- ==================== 第 5 頁 ==================== -->
+    <section class="slide" id="slide-5">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">思考與行動協同</span>
+        </div>
+        <h2 class="slide-title">走出黑盒子：AI Agent 與 ReAct 工作流程 (2022)</h2>
+        <p class="slide-subtitle">為什麼純推理容易幻覺？純行動容易盲目？Synergizing Reasoning and Acting</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card">
+            <h3 class="card-title">❌ 單一維度的兩大極限</h3>
+            <ul class="point-list">
+              <li><strong>純推理（Reason-only，如 Chain-of-Thought）</strong>：封閉黑盒子，完全依賴模型內部記憶，缺乏客觀校驗。在 HotpotQA 抽樣 50 筆失敗案例中，<strong>56% 錯誤來自事實幻覺</strong>！</li>
+              <li><strong>純行動（Act-only，如早期的 WebGPT）</strong>：沒有高層次抽象思考與工作記憶，無法有效分解子目標，遇到異常容易陷入盲目死循環。</li>
+            </ul>
+          </div>
+          <div class="card highlight">
+            <h3 class="card-title">💡 ReAct 核心哲學：擴充行動空間</h3>
+            <p class="card-text">
+              將行動空間擴展為：<strong>Â = A ∪ L</strong>（加入語言思考空間 L）。
+              <br>語言思考 <code>Thought</code> 不會直接改變外部世界，但會寫入 Context，成為代理人的<strong>工作記憶（Working Memory）</strong>。
+            </p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">🍳 廚房做菜生活比喻</h3>
+            <p class="card-text">
+              <strong>CoT</strong> 是閉眼空想炒松露（沒買食材也照炒）；<strong>Act</strong> 是進廚房亂敲鍋鏟；<strong>ReAct</strong> 是邊檢查冰箱食材（Action/Observation），邊在心裡動態修改菜單（Thought）。
+            </p>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="visual-container">
+            <h4 style="color: var(--accent-cyan); font-size: 0.95rem;">四種 Prompting 模式對照 (Figure 1, p.2)</h4>
+            
+            <div style="display: flex; flex-direction: column; gap: 0.6rem; width: 100%;">
+              <div class="card" style="padding: 0.6rem; border-left: 3px solid #64748b;">
+                <strong style="color: #cbd5e1; font-size: 0.85rem;">(a) Standard</strong>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">直接給出答案 ➔ 毫無推理過程，黑盒預測</p>
+              </div>
+              <div class="card" style="padding: 0.6rem; border-left: 3px solid var(--accent-purple);">
+                <strong style="color: var(--accent-purple); font-size: 0.85rem;">(b) CoT (Reason Only)</strong>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">純思維鏈 ➔ 邏輯結構強，但事實依據易憑空編造（56% 失敗因幻覺）</p>
+              </div>
+              <div class="card" style="padding: 0.6rem; border-left: 3px solid var(--accent-rose);">
+                <strong style="color: var(--accent-rose); font-size: 0.85rem;">(c) Act-only</strong>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">純呼叫 API ➔ 缺少目標分解與進度追蹤，容易迷失於雜訊</p>
+              </div>
+              <div class="card highlight" style="padding: 0.6rem; border-left: 3px solid var(--accent-emerald);">
+                <strong style="color: var(--accent-emerald); font-size: 0.85rem;">(d) ReAct (Reason + Act)</strong>
+                <p style="font-size: 0.8rem; color: #fff;">思考引導行動，觀察修正思考 ➔ 形成可解釋、高真實性的動態閉環</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Shunyu Yao et al. (Princeton University / Google Brain)</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/react_reasoning_and_acting.md 第 2、3.1、6 節</span>
+      </div>
+    </section>
+
+    <!-- ==================== 第 6 頁 ==================== -->
+    <section class="slide" id="slide-6">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">動態推理閉環</span>
+        </div>
+        <h2 class="slide-title">動態推理閉環：Thought ➔ Action ➔ Observation 實例解析</h2>
+        <p class="slide-subtitle">如何在凍結的大型語言模型上實現高透明度、零微調的多步決策？</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card">
+            <h3 class="card-title">🔁 標準三元組循環機制</h3>
+            <ul class="point-list">
+              <li><strong>Thought（思考）</strong>：分解問題、追蹤進度、調整策略（如：「我需要先搜尋 X，再從中尋找 Y」）。</li>
+              <li><strong>Action（行動）</strong>：向外部發出精確 API 指令（Wikipedia API: <code>search[實體]</code>, <code>lookup[字串]</code>, <code>finish[解答]</code>）。</li>
+              <li><strong>Observation（觀察）</strong>：環境回傳客觀事實（維基條目摘要、搜尋結果）。</li>
+            </ul>
+          </div>
+
+          <div class="card highlight">
+            <h3 class="card-title">📊 實測成效與質化分析 (Table 1, 2, 3)</h3>
+            <ul class="point-list">
+              <li><strong>幻覺大幅消除</strong>：在 HotpotQA 抽樣 50 筆失敗案例分析中，<strong>ReAct 的幻覺錯誤率降為 0%</strong>（CoT 為 56%）。</li>
+              <li><strong>文字遊戲 ALFWorld</strong>：6 次試驗<strong>最佳成功率達 71%（平均 57%）</strong>，遠勝純行動 Act (45%) 與訓練於 10 萬筆專家軌跡的模仿學習模型 BUTLER (37%)。</li>
+              <li><strong>融合策略勝出</strong>：HotpotQA 單純 ReAct 為 27.4 EM，但透過 <strong>ReAct ➔ CoT-SC 融合機制</strong>可達到最佳的 <strong>35.1 EM</strong>。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="visual-container">
+            <h4 style="color: var(--accent-cyan); font-size: 0.95rem;">HotpotQA 多跳問答真實軌跡圖解</h4>
+            
+            <div style="display: flex; flex-direction: column; gap: 0.4rem; width: 100%; font-size: 0.78rem;">
+              <div style="background: rgba(30, 41, 59, 0.9); padding: 0.4rem 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-amber);">
+                <span style="color: var(--accent-amber); font-weight: bold;">[Thought 1]</span> 我需要搜尋 Apple Remote 並找出它原本設計用來控制的軟體。
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.9); padding: 0.4rem 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-cyan);">
+                <span style="color: var(--accent-cyan); font-weight: bold;">[Action 1]</span> Search[Apple Remote]
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.7); padding: 0.4rem 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-emerald);">
+                <span style="color: var(--accent-emerald); font-weight: bold;">[Observation 1]</span> ...原本設計用來控制 Front Row 媒體中心程式...
+              </div>
+              <div style="background: rgba(30, 41, 59, 0.9); padding: 0.4rem 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-amber);">
+                <span style="color: var(--accent-amber); font-weight: bold;">[Thought 2]</span> 我需要接著搜尋 Front Row，看看還有什麼設備可以控制它。
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.9); padding: 0.4rem 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-cyan);">
+                <span style="color: var(--accent-cyan); font-weight: bold;">[Action 2]</span> Search[Front Row (software)]
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.7); padding: 0.4rem 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-emerald);">
+                <span style="color: var(--accent-emerald); font-weight: bold;">[Observation 2]</span> ...可透過 Apple Remote 或鍵盤功能鍵控制...
+              </div>
+              <div style="background: rgba(30, 41, 59, 0.9); padding: 0.4rem 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-purple);">
+                <span style="color: var(--accent-purple); font-weight: bold;">[Finish]</span> Finish[keyboard function keys]
+              </div>
+            </div>
+
+            <div class="card" style="width: 100%; margin-top: 0.25rem;">
+              <h3 class="card-title" style="color: var(--accent-rose); font-size: 0.8rem;">⚠️ 論文指出的兩大錯誤死穴</h3>
+              <p class="card-text" style="font-size: 0.75rem;">
+                1. <strong>無效搜尋</strong>（佔錯誤 23%）：搜尋無結果使思維脫軌。<br>
+                2. <strong>死循環</strong>（佔錯誤 47%）：結構化約束限制彈性，反覆產生相同動作。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>多跳問答與具身決策閉環實錄</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/react_reasoning_and_acting.md 第 3.2、4.1、5 節</span>
+      </div>
+    </section>
+
+    <!-- ==================== 第 7 頁 ==================== -->
+    <section class="slide" id="slide-7">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">自監督工具學習</span>
+        </div>
+        <h2 class="slide-title">模型自主決定何時呼叫工具：Toolformer (2023)</h2>
+        <p class="slide-subtitle">無需龐大人工標註：透過自監督損失過濾，讓模型自學 API 調用</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card">
+            <h3 class="card-title">🎯 解決 LLM 固有宿疾</h3>
+            <p class="card-text">
+              LLM 算不準多位數算術、查不準罕見實體事實，且無法感知時間推進。過往外掛工具依賴大量人工標註，且限制於特定 Prompt。
+            </p>
+          </div>
+          <div class="card highlight">
+            <h3 class="card-title">🔍 自監督損失過濾公式 (Filtering Criterion)</h3>
+            <div class="formula-box" style="font-size: 1rem;">
+              L<sub>i</sub><sup>−</sup> − L<sub>i</sub><sup>+</sup> ≥ τ<sub>f</sub>
+            </div>
+            <p class="formula-note" style="text-align: left; line-height: 1.4;">
+              • <strong>L<sub>i</sub><sup>+</sup></strong>：提供 API 呼叫與結果後的未來 Token 預測損失。<br>
+              • <strong>L<sub>i</sub><sup>−</sup></strong>：未呼叫 API 或呼叫卻無結果時的最低損失。<br>
+              ➔ <strong>唯有顯著降低困惑度（Perplexity）的有效調用才會被保留！</strong>
+            </p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">🛠️ 五大整合工具</h3>
+            <p class="card-text" style="font-size: 0.85rem;">
+              1. <strong>Calculator</strong>（四則運算） | 2. <strong>Wikipedia Search</strong>（BM25 檢索）<br>
+              3. <strong>QA 系統</strong>（Atlas 模型） | 4. <strong>機器翻譯</strong>（NLLB 600M） | 5. <strong>Calendar</strong>（當前日期）
+            </p>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="visual-container">
+            <h4 style="color: var(--accent-cyan); font-size: 0.95rem;">以小博大的驚人戰果 (Table 4, p.6)</h4>
+            
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 0.4rem;">
+              <div class="card" style="padding: 0.6rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <strong style="color: var(--accent-emerald);">ASDiv 數學基準</strong>
+                  <span style="color: #fff; font-weight: bold;">Toolformer 6.7B: 40.4</span>
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                  對比 GPT-3 (175B) 之 14.0，參數量小 25 倍，分數超越 <strong>2.8 倍</strong>！
+                </div>
+              </div>
+
+              <div class="card" style="padding: 0.6rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <strong style="color: var(--accent-cyan);">SVAMP 數學推理</strong>
+                  <span style="color: #fff; font-weight: bold;">Toolformer: 29.4 vs GPT-3: 10.0</span>
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                  97.9% 的題目中，模型主動自發呼叫 Calculator 工具解決。
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="width: 100%; margin-top: 0.3rem;">
+              <h3 class="card-title" style="color: var(--accent-purple); font-size: 0.85rem;">📈 775M 工具能力湧現分水嶺 (Figure 4, p.9)</h3>
+              <p class="card-text" style="font-size: 0.78rem;">
+                在 GPT-2 家族測試 3 種工具時，小模型（124M/355M）無法獲益；有效利用工具的能力在 <strong>775M 參數以上才顯現</strong>。
+              </p>
+              <h3 class="card-title" style="color: var(--accent-amber); font-size: 0.85rem; margin-top: 0.3rem;">⚠️ 關鍵限制</h3>
+              <p class="card-text" style="font-size: 0.78rem;">
+                <strong>無法鏈式調用（Cannot Chain Tools）</strong>：無法把工具 A 輸出傳給工具 B；且在 WebQS 問答上（26.3）仍落後於 GPT-3 175B（29.0）。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Timo Schick et al. (Meta AI Research / UPF)</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/toolformer.md 第 2、3.2、4.2、4.4、5 節</span>
+      </div>
+    </section>
+
+    <!-- ==================== 第 8 頁 ==================== -->
+    <section class="slide" id="slide-8">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">檢索增強生成</span>
+        </div>
+        <h2 class="slide-title">告別閉卷考試：Retrieval-Augmented Generation (RAG) (2020)</h2>
+        <p class="slide-subtitle">結合參數化記憶與非參數化維基向量庫：端到端檢索增強生成處方</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card">
+            <h3 class="card-title">📖 開卷考試比喻</h3>
+            <p class="card-text">
+              <strong>純參數模型</strong>是閉卷死背百科全書，面對冷門事實容易記混產生幻覺；<strong>RAG</strong> 是開卷考試，配備一位光速圖書檢索員（DPR），考題一出立刻找出對應段落攤在桌上給學生（BART）歸納生成。
+            </p>
+          </div>
+
+          <div class="card highlight">
+            <h3 class="card-title">👥 雙架構形式：RAG-Sequence vs RAG-Token</h3>
+            <ul class="point-list">
+              <li><strong>RAG-Sequence</strong>：整句回答皆基於同一個檢索段落邊緣化，論述邏輯一致性極高。</li>
+              <li><strong>RAG-Token</strong>：每個生成的詞可參考不同檢索段落，能融合多篇文檔拼湊跨領域答案。</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">🔥 殺手級特性：知識熱插拔 (Index Hot-Swapping)</h3>
+            <p class="card-text">
+              將 2016 年維基索引直接替換為 2018 年索引，在<strong>完全不對模型進行任何重新訓練</strong>的情況下，回答世界領導人更新問題正確率由 4%~12% 飆升至 <strong>68%~70%</strong>！
+            </p>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="visual-container">
+            <h4 style="color: var(--accent-cyan); font-size: 0.95rem;">雙記憶混合架構 (Figure 1, p.2)</h4>
+            
+            <div style="background: rgba(30, 41, 59, 0.9); padding: 0.75rem; border-radius: 8px; width: 100%;">
+              <div style="font-size: 0.85rem; color: var(--accent-emerald); font-weight: bold;">
+                1. 非參數記憶 (DPR 稠密向量庫)
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-sub); margin-top: 0.2rem;">
+                • 2,100 萬篇維基百科切片 (100-word chunks)<br>
+                • BERT<sub>d</sub> + BERT<sub>q</sub> 雙編碼器，MIPS 亞線性高速搜尋 (FAISS 佔 36~100 GB)
+              </div>
+
+              <div style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: bold; margin-top: 0.6rem;">
+                2. 參數化記憶 (BART-large 生成器)
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-sub); margin-top: 0.2rem;">
+                • 4 億參數 (400M) Seq2Seq 模型，拼接輸入與檢索段落生成回答
+              </div>
+            </div>
+
+            <div class="card" style="width: 100%; margin-top: 0.4rem;">
+              <h3 class="card-title" style="color: var(--accent-amber); font-size: 0.85rem;">⚠️ 客觀事實：RAG 能否完全消除幻覺？</h3>
+              <p class="card-text" style="font-size: 0.78rem;">
+                <strong>不能保證 100% 消除！</strong> 論文明確指出：若外部知識庫本身存在錯誤或偏見，或發生<strong>檢索崩潰（Retrieval Collapse）</strong>使生成器忽略文檔，模型仍會輸出錯誤內容。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Patrick Lewis et al. (Facebook AI Research / UCL / NYU)</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/retrieval_augmented_generation.md 第 2、3.1、4.3、5 節</span>
+      </div>
+    </section>
+
+    <!-- ==================== 第 9 頁 ==================== -->
+    <section class="slide" id="slide-9">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">三大架構辨析</span>
+          <span class="concept-notice">【教學概念示意】</span>
+        </div>
+        <h2 class="slide-title">技術大對決：RAG、ReAct 與 Toolformer 深度比較</h2>
+        <p class="slide-subtitle">深入剖析三種技術的根本差異：絕不可混為一談的架構定位</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left" style="flex: 1.3;">
+          <div class="visual-container" style="padding: 0.6rem;">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>比較維度</th>
+                  <th>RAG (2020)</th>
+                  <th>ReAct (2022)</th>
+                  <th>Toolformer (2023)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>核心定位</strong></td>
+                  <td>外部長文本知識檢索</td>
+                  <td>多步驟動態推理與環境閉環</td>
+                  <td>自監督單步 API 調用內嵌</td>
+                </tr>
+                <tr>
+                  <td><strong>模型狀態</strong></td>
+                  <td><strong>聯合微調</strong> (Retriever + Generator)</td>
+                  <td><strong>凍結大模型</strong> (純 In-Context 提示)</td>
+                  <td><strong>模型微調</strong> (訓練資料加入 API Token)</td>
+                </tr>
+                <tr>
+                  <td><strong>執行機制</strong></td>
+                  <td>輸入查詢 ➔ MIPS 檢索 Top-K ➔ 邊緣化生成</td>
+                  <td>Thought ➔ Action ➔ Observation 多輪交錯循環</td>
+                  <td>文字生成時自主輸出 &lt;API&gt;，在 → 處中斷等待</td>
+                </tr>
+                <tr>
+                  <td><strong>思維透明度</strong></td>
+                  <td>中等（可溯源檢索文章）</td>
+                  <td><strong>極高</strong>（明載自然語言 Thought 軌跡）</td>
+                  <td>低（直接預測 API，無中間語言思維）</td>
+                </tr>
+                <tr>
+                  <td><strong>多步鏈式能力</strong></td>
+                  <td>否（單次檢索融合）</td>
+                  <td><strong>是</strong>（動態依觀察調整下一步行動）</td>
+                  <td><strong>否</strong>（工具獨立生成，無法串接 A→B）</td>
+                </tr>
+                <tr>
+                  <td><strong>典型擅長場景</strong></td>
+                  <td>企業私有資料庫問答、法規條文查核</td>
+                  <td>具身文字遊戲 (ALFWorld)、網頁互動導航</td>
+                  <td>精準四則運算、即時日曆、機器翻譯</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-right" style="flex: 0.7;">
+          <div class="card highlight">
+            <h3 class="card-title">🧩 現代 AI Agent 的概念融合</h3>
+            <p class="card-text" style="font-size: 0.85rem;">
+              在現代工業級 Agent 系統中，這三者並非非此即彼，而是<strong>概念互補</strong>：
+            </p>
+            <ul class="point-list" style="margin-top: 0.3rem;">
+              <li><strong>ReAct 作為大腦決策引擎</strong>：掌控任務拆解與行動流程。</li>
+              <li><strong>RAG 作為外接硬碟</strong>：當需要大量長篇文檔依據時發起檢索。</li>
+              <li><strong>Toolformer 式工具箱</strong>：遇到日期或精確數學時呼叫 Python/計算機。</li>
+            </ul>
+          </div>
+
+          <div class="card" style="margin-top: 0.4rem;">
+            <p class="card-text" style="font-size: 0.75rem; color: var(--text-muted);">
+              ⚠️ <em>學術提醒</em>：上表所列三篇論文各自獨立探索不同學術方向，此處之融合圖係為幫助理解之教學概念歸納，非原作者共同提出。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>架構全方位對比矩陣</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/index.md 第 3 節；各條目 Limitations</span>
+      </div>
+    </section>
+
+    <!-- ==================== 第 10 頁 ==================== -->
+    <section class="slide" id="slide-10">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="category-tag">總結與文獻</span>
+          <span class="concept-notice">【教學概念示意】</span>
+        </div>
+        <h2 class="slide-title">總結與未來展望：邁向知行合一的自主智能體</h2>
+        <p class="slide-subtitle">從語言模擬走向真實世界互動：五篇奠基性學術論文回顧</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card">
+            <h3 class="card-title">🎓 大學生的現代 AI 認知升級</h3>
+            <ul class="point-list">
+              <li><strong>Transformer (2017)</strong>：打破序列枷鎖，證明「Attention Is All You Need」，建立平行算力基礎。</li>
+              <li><strong>GPT-3 (2020)</strong>：揭示 Scaling Laws 力量，開創不改權重的 Few-Shot 提示工程。</li>
+              <li><strong>RAG (2020)</strong>：提出開卷考試處方，藉由非參數化索引實現免重訓知識更新。</li>
+              <li><strong>ReAct (2022)</strong>：將推理與行動閉環，讓 AI 走出封閉黑盒子，實現動態任務規劃。</li>
+              <li><strong>Toolformer (2023)</strong>：自監督學習工具調用，使模型具備自我延伸 API 的本能。</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3 class="card-title" style="color: var(--accent-rose);">🚧 依然存在的學術挑戰</h3>
+            <p class="card-text" style="font-size: 0.8rem;">
+              長序列 $O(n^2)$ 運算代價、複雜代理決策中的死循環、外部資料庫的社會偏見傳播，以及工具無法鏈式調用的瓶頸。
+            </p>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="visual-container" style="justify-content: flex-start; gap: 0.4rem; padding: 0.6rem;">
+            <h4 style="color: var(--accent-cyan); font-size: 0.9rem;">五篇奠基性論文清單 (參考文獻)</h4>
+            
+            <div style="display: flex; flex-direction: column; gap: 0.4rem; width: 100%; font-size: 0.75rem;">
+              <div style="background: rgba(30, 41, 59, 0.7); padding: 0.4rem; border-radius: 4px; border-left: 2px solid var(--accent-blue);">
+                <div style="font-weight: bold; color: #fff;">1. Attention Is All You Need (2017)</div>
+                <div style="color: var(--text-muted);">A. Vaswani et al. | NIPS 2017 | <a href="https://arxiv.org/abs/1706.03762" target="_blank" style="color: var(--accent-cyan);">arXiv:1706.03762</a></div>
+              </div>
+              <div style="background: rgba(30, 41, 59, 0.7); padding: 0.4rem; border-radius: 4px; border-left: 2px solid var(--accent-purple);">
+                <div style="font-weight: bold; color: #fff;">2. Language Models are Few-Shot Learners (2020)</div>
+                <div style="color: var(--text-muted);">T. B. Brown et al. | NeurIPS 2020 | <a href="https://arxiv.org/abs/2005.14165" target="_blank" style="color: var(--accent-cyan);">arXiv:2005.14165</a></div>
+              </div>
+              <div style="background: rgba(30, 41, 59, 0.7); padding: 0.4rem; border-radius: 4px; border-left: 2px solid var(--accent-emerald);">
+                <div style="font-weight: bold; color: #fff;">3. Retrieval-Augmented Generation for NLP Tasks (2020)</div>
+                <div style="color: var(--text-muted);">P. Lewis et al. | NeurIPS 2020 | <a href="https://arxiv.org/abs/2005.11401" target="_blank" style="color: var(--accent-cyan);">arXiv:2005.11401</a></div>
+              </div>
+              <div style="background: rgba(30, 41, 59, 0.7); padding: 0.4rem; border-radius: 4px; border-left: 2px solid var(--accent-amber);">
+                <div style="font-weight: bold; color: #fff;">4. ReAct: Synergizing Reasoning and Acting in LMs (2022)</div>
+                <div style="color: var(--text-muted);">S. Yao et al. | ICLR 2023 | <a href="https://arxiv.org/abs/2210.03629" target="_blank" style="color: var(--accent-cyan);">arXiv:2210.03629</a></div>
+              </div>
+              <div style="background: rgba(30, 41, 59, 0.7); padding: 0.4rem; border-radius: 4px; border-left: 2px solid var(--accent-rose);">
+                <div style="font-weight: bold; color: #fff;">5. Toolformer: LMs Can Teach Themselves to Use Tools (2023)</div>
+                <div style="color: var(--text-muted);">T. Schick et al. | Meta AI | <a href="https://arxiv.org/abs/2302.04761" target="_blank" style="color: var(--accent-cyan);">arXiv:2302.04761</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>AI Agents 與 LLM Wiki 完結總覽</span>
+        <span class="wiki-citation">📖 Wiki 依據：wiki/index.md 第 1 節收錄清單</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 底部操作控制列 -->
+  <footer class="presentation-controls">
+    <div class="nav-buttons">
+      <button id="btn-prev" class="btn" title="上一頁 (←)">上一頁</button>
+      <button id="btn-next" class="btn" title="下一頁 (→)">下一頁</button>
+      <button id="btn-fullscreen" class="btn" title="全螢幕 (F)">全螢幕 ⛶</button>
+    </div>
+
+    <div id="page-counter" class="page-counter">1 / 10</div>
+
+    <div class="keyboard-hint">
+      鍵盤支援：<span class="keyboard-key">←</span> <span class="keyboard-key">→</span> <span class="keyboard-key">空白鍵</span> 翻頁，<span class="keyboard-key">F</span> 全螢幕
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
